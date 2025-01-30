@@ -1,0 +1,48 @@
+﻿<nav class="main-nav_box">
+    <ul class="main-nav_list">
+        @foreach (NavTab tab in _tabs){
+            <li>
+                @switch (_tabs.IndexOf(tab))
+                {
+                    case 0:
+                        if (_tabs.Count == 1){
+                            <a class="main-nav_link main-nav_one" href=@tab.Link>@tab.Name</a>
+                        }
+                        else {
+                            <a class="main-nav_link main-nav_start" href=@tab.Link>@tab.Name</a>
+                        }
+                        break;
+                    case int n when n == this._tabs.Count-1:
+                        <a class="main-nav_link main-nav_end" href=@tab.Link>@tab.Name</a>
+                        break;
+                    default:
+                        <a class="main-nav_link main-nav_center" href=@tab.Link>@tab.Name</a>
+                        break;
+                }
+            </li>
+        }
+    </ul>
+</nav>
+
+@code {
+    private List<NavTab> _tabs;
+
+    public TabsLayout(){
+        this._tabs = new List<NavTab>();
+        this.AddTab("Main",null);
+    }
+
+    public void AddTab(string? name, string? link){
+        if (name == null){
+            name = "Tab";
+        }
+        if (link == null){
+            link = "/";
+        }
+        this._tabs.Add(new NavTab(){
+            Name=name,
+            Link=link
+        });
+    }
+
+}
