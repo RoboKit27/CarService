@@ -2,23 +2,11 @@
     <ul class="main-nav_list">
         @foreach (NavTab tab in _tabs){
             <li>
-                @switch (_tabs.IndexOf(tab))
-                {
-                    case 0:
-                        if (_tabs.Count == 1){
-                            <a class="main-nav_link main-nav_one" href=@tab.Link>@tab.Name</a>
-                        }
-                        else {
-                            <a class="main-nav_link main-nav_start" href=@tab.Link>@tab.Name</a>
-                        }
-                        break;
-                    case int n when n == this._tabs.Count-1:
-                        <a class="main-nav_link main-nav_end" href=@tab.Link>@tab.Name</a>
-                        break;
-                    default:
-                        <a class="main-nav_link main-nav_center" href=@tab.Link>@tab.Name</a>
-                        break;
-                }
+                <a class="main-nav_link @GetTabStyle(_tabs.IndexOf(tab))" href=@tab.Link>
+                    @if (tab.Icon != null) { 
+                        <Icon Name="(IconName)tab.Icon" style="margin-right: 4px;" /> }
+                    @tab.Name
+                </a>
             </li>
         }
     </ul>
@@ -29,10 +17,11 @@
 
     public TabsLayout(){
         this._tabs = new List<NavTab>();
-        this.AddTab("Main",null);
+        this.AddTab("Main",null,IconName.HouseFill);
+        this.AddTab("Profile",null,IconName.PersonFill);
     }
 
-    public void AddTab(string? name, string? link){
+    public void AddTab(string? name, string? link, IconName? icon){
         if (name == null){
             name = "Tab";
         }
@@ -41,8 +30,20 @@
         }
         this._tabs.Add(new NavTab(){
             Name=name,
-            Link=link
+            Link=link,
+            Icon=icon
         });
+    }
+
+    public string GetTabStyle(int index)
+    {
+        switch (index)
+        {
+            case 0: if (this._tabs.Count == 1) return "main-nav_one";
+                else return "main-nav_start";
+            case int n when n == this._tabs.Count - 1: return "main-nav_end";
+            default: return "main-nav_center";
+        }
     }
 
 }
