@@ -1,3 +1,13 @@
-﻿<div>
-    
+﻿@page "/master"
+
+<div>
+    <div class="string-box">
+        <Image Src="images/empty-profile-photo.png" Class="rounded" style="width: 200px;height: 200px;" />
+        <div class="info-box">
+            <p class="big-text info-item">@Master.FirstName</p>
+            <p class="big-text info-item">@Master.LastName</p>
+            <p class="big-text info-item">@Master.Profession</p>
+            <p class="big-text info-item">Стаж: @GetWorkStateText()</p>
+        </div>
+    </div>
 </div>
