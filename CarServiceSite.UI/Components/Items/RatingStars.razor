@@ -1,4 +1,4 @@
-﻿<div style="width: @(1280*Scale);height: @(256*Scale);overflow: hidden;">
+﻿<div style="width: @((int)(1280*Scale))px;height: @((int)(256*Scale))px;overflow: hidden;">
     @foreach (RatingStar star in _stars)
     {
         if (_stars.IndexOf(star) < DefaultValue && !IsDynamic) _stars[_stars.IndexOf(star)].IsActive = true;
@@ -13,6 +13,8 @@
     public int DefaultValue { get; set; } = 0;
     [Parameter]
     public bool IsDynamic { get; set; } = false;
+    [Parameter]
+    public Action? OnSet { get; set; } = null;
 
     private List<RatingStar> _stars = new List<RatingStar>();
 
@@ -50,7 +52,14 @@
         return 0;
     }
 
-    public void Off() => this.IsDynamic = false;
+    public void Off() 
+    {
+        this.IsDynamic = false;
+        if (this.OnSet != null)
+        {
+            this.OnSet();
+        }
+    }
     public void On() => this.IsDynamic = true;
 
     private void EnableStars(int activeId)

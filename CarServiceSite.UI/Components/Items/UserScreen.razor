@@ -1,0 +1,130 @@
+﻿@rendermode InteractiveServer
+
+<Modal @ref="_modal" Title="Оставить отзыв">
+    <BodyTemplate>
+        <div style="display: flex;flex-direction: column;justify-content: center;">
+            <RatingStars @ref="_ratingStars" IsDynamic=true Scale=0.36 OnSet=EnableSaveButton />
+            <InputTextArea style="margin-top: 4px;height: 100px;" @bind-Value="_commentText"/>
+        </div>
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button style="display: flex;flex: 1;justify-content: center;" Color="ButtonColor.Primary" Disabled=_isSaveCommentButtonDisable @onclick="SaveComment">Сохранить</Button>
+    </FooterTemplate>
+</Modal>
+
+<div class="center-items">
+    <div class="row-box" style="margin-bottom: 20px;">
+        <UserPhoto UserId=_user.Id />
+        <div class="info-box">
+            <p class="big-text info-item">@_user.FirstName</p>
+            <p class="big-text info-item">@_user.LastName</p>
+            <p class="big-text info-item">@_user.Role.Name</p>
+        </div>
+    </div>
+    <RatingStars DefaultValue=3 Scale=0.4 />
+    <Button style="margin-top: 20px;width: 500px;" Color="ButtonColor.Primary" Disabled=@_isAddCommentButtonDisable @onclick="ShowModal">Оставить отзыв</Button>
+    @if (_user.Role.Id != 4)
+    {    
+        <Card style="margin-top: 20px;">
+            <CardBody>
+                @foreach (CommentOutputModel comment in _user.Comments)
+                {
+                    <Card style="width: 480px;margin-bottom: 10px;">
+                        <CardBody>
+                            <div class="row-box" style="margin-bottom: 4px;">
+                                <UserPhoto UserId=comment.Author.Id Width=40 Height=40 />
+                                <div class="column-box" style="margin-left: 3px;">
+                                    <p class="small-text">@comment.Author.FirstName</p>
+                                    @if (comment.Author.LastName != null)
+                                    {
+                                        <p class="small-text">@comment.Author.LastName</p>
+                                    }
+                                </div>
+                                <div style="display: flex;flex: 1;flex-direction: row-reverse;">
+                                    <RatingStars DefaultValue=@comment.Rating Scale=0.14 />
+                                </div>
+                            </div>
+                            <Card>
+                                <CardBody>
+                                    @if (comment.Text != null)
+                                    {
+                                        <p>@comment.Text</p>
+                                    }
+                                    else 
+                                    {
+                                        <p style="color: gray;">Нет текста</p>
+                                    }
+                                </CardBody>
+                            </Card>
+                        </CardBody>
+                    </Card>
+                }
+            </CardBody>
+        </Card>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    private Modal _modal = default!;
+    private RatingStars _ratingStars = default!;
+
+    private string? _commentText;
+    private bool _isAddCommentButtonDisable = false;
+    private bool _isSaveCommentButtonDisable = true;
+    private UserOutputModel _user;
+    private UserManager _userManager = new();
+
+    protected override void OnParametersSet()
+    {
+        if (this.Id != null)
+        {
+            this._user = this._userManager.GetUserById((int)this.Id);
+        }
+    }
+
+    private async void EnableSaveButton()
+    {
+        Console.WriteLine("great");
+        this._isSaveCommentButtonDisable = false;
+        Console.WriteLine(this.GetType());
+    }
+
+    private async Task SaveComment()
+    {
+        int rating = this._ratingStars.GetValue();
+        string? text = this._commentText;
+        if (rating != 0)
+        {
+            if (text == "")
+            {
+                text = null;
+            }
+            this._userManager.AddCommentByUserId(new CommentInputModel() 
+            {
+                Rating=rating,
+                Text=text,
+                Author = new UserOutputModel()
+                {
+                    Id = 5,
+                    FirstName = "Артём",
+                    Role = new RoleOutputModel()
+                    {
+                        Id = 4,
+                        Name = "Пользователь"
+                    }
+                }
+            }, this._user.Id);
+        }
+        this._user = this._userManager.GetUserById((int)this.Id);
+        this._isAddCommentButtonDisable = true;
+        await this._modal.HideAsync();
+    }
+
+    private async Task ShowModal()
+    {
+        await this._modal.ShowAsync();
+    }
+}

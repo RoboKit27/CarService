@@ -75,3 +75,41 @@
 .main-nav_item {
 
 }
+
+.center-items {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.row-box {
+    display: flex;
+    flex-direction: row;
+}
+
+.column-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.big-text {
+    height: auto;
+    width: auto;
+    margin: 0px;
+    font-size: 30px;
+}
+
+.small-text {
+    height: 15px;
+    width: auto;
+    margin: 0px;
+    font-size: 14px;
+}
+
+.info-box {
+    margin-left: 10px;
+    width: auto;
+    height: auto;
+}

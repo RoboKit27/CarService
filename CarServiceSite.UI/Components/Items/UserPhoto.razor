@@ -1,0 +1,18 @@
+﻿@if (UserId == null || 
+            !File.Exists(Path.GetFullPath($"wwwroot/images/user-icons/user_{UserId}.png")))
+{
+    <Image Src="images/empty-profile-photo.png" Class="rounded" style=@($"width: {Width}px;height: {Height}px;") />
+}
+else 
+{
+    <Image Src=@($"images/user-icons/user_{UserId}.png") Class="rounded" style=@($"width: {Width}px;height: {Height}px;") />
+}
+
+@code {
+    [Parameter]
+    public int? UserId { get; set; } = null;
+    [Parameter]
+    public int Width { get; set; } = 200;
+    [Parameter]
+    public int Height { get; set; } = 200;
+}

@@ -6,16 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Dtos\**" />
-    <Compile Remove="InputModels\**" />
-    <Compile Remove="OutputModels\**" />
-    <EmbeddedResource Remove="Dtos\**" />
-    <EmbeddedResource Remove="InputModels\**" />
-    <EmbeddedResource Remove="OutputModels\**" />
-    <None Remove="Dtos\**" />
-    <None Remove="InputModels\**" />
-    <None Remove="OutputModels\**" />
-  </ItemGroup>
-
 </Project>

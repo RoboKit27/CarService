@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CarServiceSite.Core\CarServiceSite.Core.csproj" />
+  </ItemGroup>
+
 </Project>

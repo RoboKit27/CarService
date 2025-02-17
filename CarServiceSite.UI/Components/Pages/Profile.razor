@@ -1,0 +1,11 @@
+﻿@page "/profile"
+
+<PageTitle>Profile</PageTitle>
+
+<UserScreen Id=Id/>
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public int? Id { get; set; }
+}
