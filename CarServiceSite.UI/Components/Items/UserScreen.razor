@@ -3,12 +3,12 @@
 <Modal @ref="_modal" Title="Оставить отзыв">
     <BodyTemplate>
         <div style="display: flex;flex-direction: column;justify-content: center;">
-            <RatingStars @ref="_ratingStars" IsDynamic=true Scale=0.36 OnSet=EnableSaveButton />
+            <RatingStars @ref="_ratingStars" IsDynamic=true Scale=0.36 />
             <InputTextArea style="margin-top: 4px;height: 100px;" @bind-Value="_commentText"/>
         </div>
     </BodyTemplate>
     <FooterTemplate>
-        <Button style="display: flex;flex: 1;justify-content: center;" Color="ButtonColor.Primary" Disabled=_isSaveCommentButtonDisable @onclick="SaveComment">Сохранить</Button>
+        <Button style="display: flex;flex: 1;justify-content: center;" Color="ButtonColor.Primary" @onclick="SaveComment">Сохранить</Button>
     </FooterTemplate>
 </Modal>
 
@@ -73,7 +73,6 @@
 
     private string? _commentText;
     private bool _isAddCommentButtonDisable = false;
-    private bool _isSaveCommentButtonDisable = true;
     private UserOutputModel _user;
     private UserManager _userManager = new();
 
@@ -85,40 +84,34 @@
         }
     }
 
-    private async void EnableSaveButton()
-    {
-        Console.WriteLine("great");
-        this._isSaveCommentButtonDisable = false;
-        Console.WriteLine(this.GetType());
-    }
-
     private async Task SaveComment()
     {
         int rating = this._ratingStars.GetValue();
         string? text = this._commentText;
-        if (rating != 0)
+        if (rating == 0)
         {
-            if (text == "")
-            {
-                text = null;
-            }
-            this._userManager.AddCommentByUserId(new CommentInputModel() 
-            {
-                Rating=rating,
-                Text=text,
-                Author = new UserOutputModel()
-                {
-                    Id = 5,
-                    FirstName = "Артём",
-                    Role = new RoleOutputModel()
-                    {
-                        Id = 4,
-                        Name = "Пользователь"
-                    }
-                }
-            }, this._user.Id);
+            rating = 1;
         }
-        this._user = this._userManager.GetUserById((int)this.Id);
+        if (text == "")
+        {
+            text = null;
+        }
+        this._userManager.AddCommentByUserId(new CommentInputModel()
+        {
+            Rating = rating,
+            Text = text,
+            Author = new UserOutputModel()
+            {
+                Id = 5,
+                FirstName = "Артём",
+                Role = new RoleOutputModel()
+                {
+                    Id = 4,
+                    Name = "Пользователь"
+                }
+            }
+        }, this._user.Id);
+    this._user = this._userManager.GetUserById((int)this.Id);
         this._isAddCommentButtonDisable = true;
         await this._modal.HideAsync();
     }
