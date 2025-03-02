@@ -1,7 +1,15 @@
-﻿@page "/"
+﻿@page"/"
+@code{
+    ViewData["Title"] = "Буквы в столбик";
+    char[] letters = { 'A', 'B', 'C', 'D', 'E' };
+}
 
-<PageTitle>Main</PageTitle>
-
-<div>
-    <p>Main page</p>
+<div class="container">
+    <h1>@ViewData["Title"]</h1>
+    <div class="letters-list">
+        @foreach (var letter in letters)
+        {
+            <p class="letter">@letter</p>
+        }
+    </div>
 </div>
