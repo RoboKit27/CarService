@@ -11,6 +11,6 @@ namespace CarServiceSite.Core.OutputModels
         public int Id { get; set; }
         public string? Text { get; set; }
         public int Rating { get; set; }
-        public UserOutputModel Author { get; set; }
+        public List<UserOutputModel> Users { get; set; }
     }
 }

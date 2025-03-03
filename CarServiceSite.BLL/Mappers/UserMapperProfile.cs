@@ -16,8 +16,10 @@ namespace CarServiceSite.BLL.Mappers
         {
             CreateMap<UserDto,UserOutputModel>();
             CreateMap<UserOutputModel,UserDto>();
+            
             CreateMap<RoleDto,RoleOutputModel>();
             CreateMap<RoleOutputModel,RoleDto>();
+
             CreateMap<CommentDto,CommentOutputModel>();
             CreateMap<CommentInputModel,CommentDto>();
         }
