@@ -1,7 +1,44 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@rendermode InteractiveServer
 
-<PageTitle>Main</PageTitle>
+<button @onclick="GetClaimsPrincipalData">Get ClaimsPrincipal Data</button>
+<AuthorizeView Roles="Prezenent">
+    <Authorized>
+        <p>PrezenentPrezenentPrezenent</p>
 
-<div>
-    <p>Main page</p>
-</div>
+        @if (claims.Count() > 0)
+        {
+            <ul>
+                @foreach (var claim in claims)
+                {
+                    <li>@claim.Type: @claim.Value</li>
+                }
+            </ul>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <p>А ну логинься!</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    [CascadingParameter]
+    public Task<AuthenticationState> State { get; set; }
+
+    private List<Claim> claims = new List<Claim>();
+
+
+    private async Task GetClaimsPrincipalData()
+    {
+        var authState = await State;
+        var user = authState.User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            claims = user.Claims.ToList();
+        }
+    }
+}

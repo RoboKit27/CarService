@@ -1,0 +1,34 @@
+﻿@page "/login"
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+
+
+<EditForm Model="loginModel" OnSubmit="StartLogin" FormName="testing">
+    <InputText @bind-Value="loginModel.Phone"></InputText>
+    <InputText @bind-Value="loginModel.Password"></InputText>
+    <button type="submit">LOGIN</button>
+</EditForm>
+
+@code {
+    [CascadingParameter]
+    public HttpContext httpContext { get; set; }
+
+    [SupplyParameterFromForm]
+    public UserInputModel loginModel { get; set; } = new UserInputModel();
+
+    public async void StartLogin()
+    {
+        //Идем в базу проверяться и тд
+        var claims = new List<Claim>()
+        {
+            new Claim("Phone", loginModel.Phone),
+            new Claim(ClaimTypes.Role, "Prezenent")
+        };
+
+        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        var pr = new ClaimsPrincipal(identity);
+
+        await httpContext.SignInAsync(pr);
+    }
+}
