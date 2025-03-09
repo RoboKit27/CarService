@@ -18,5 +18,18 @@ namespace CarServiceSite.DAL
         {
             optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("CarServiceSiteConnectionString"));
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CommentDto>(c =>
+            {
+                c.HasOne(p => p.Addressee)
+                .WithMany(p => p.CommentsAboutYou);
+                c.HasOne(p => p.Author)
+                .WithMany(p => p.YourComments);
+            });
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

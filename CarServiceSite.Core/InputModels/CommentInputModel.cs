@@ -6,6 +6,7 @@ namespace CarServiceSite.Core.InputModels
     {
         public int Rating { get; set; }
         public string? Text { get; set; }
-        public List<UserOutputModel> Users { get; set; }
+        public UserOutputModel Author { get; set; }
+        public UserOutputModel Addressee { get; set; }
     }
 }

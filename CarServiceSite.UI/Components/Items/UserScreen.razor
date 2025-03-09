@@ -27,7 +27,7 @@
     {    
         <Card style="margin-top: 20px;">
             <CardBody>
-                @foreach (CommentOutputModel comment in _user.Comments)
+                @foreach (CommentOutputModel comment in _user.CommentsAboutYou)
                 {
                     <Card style="width: 480px;margin-bottom: 10px;">
                         <CardBody>
@@ -100,17 +100,7 @@
         {
             Rating = rating,
             Text = text,
-            Author = this._userManager.GetUserById(1)
-            // new UserOutputModel()
-            // {
-            //     Id = 5,
-            //     FirstName = "Артём",
-            //     Role = new RoleOutputModel()
-            //     {
-            //         Id = 4,
-            //         Name = "Пользователь"
-            //     }
-            // }
+            Author = _userManager.GetCurrentUser()
         }, this._user.Id);
         this._user = this._userManager.GetUserById((int)this.Id);
         this._isAddCommentButtonDisable = true;

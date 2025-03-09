@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CarServiceSite.Core.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace CarServiceSite.Core.OutputModels
         public string FirstName { get; set; }
         public string? LastName { get; set; }
         public RoleOutputModel Role { get; set; }
-        public List<CommentOutputModel> Comments { get; set; }
+        public List<CommentOutputModel>? YourComments { get; set; }
+        public List<CommentOutputModel>? CommentsAboutYou { get; set; }
     }
 }

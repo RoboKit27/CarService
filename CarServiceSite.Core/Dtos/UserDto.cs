@@ -13,6 +13,7 @@ namespace CarServiceSite.Core.Dtos
         public string? LastName { get; set; }
         public string Password { get; set; }
         public RoleDto Role { get; set; }
-        public List<CommentDto>? Comments { get; set; }
+        public List<CommentDto>? YourComments { get; set; }
+        public List<CommentDto>? CommentsAboutYou { get; set; }
     }
 }

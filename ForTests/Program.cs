@@ -10,12 +10,12 @@ namespace ForTests
             var context = new Context();
             //context.Database.EnsureCreated();
 
-            //context.Roles.Add(new RoleDto() { Name="Автомаляр" });
-            //context.Roles.Add(new RoleDto() { Name="Автомеханик" });
-            //context.Roles.Add(new RoleDto() { Name="Автоэлектрик" });
-            //context.Roles.Add(new RoleDto() { Name="Шиномонтажник" });
-            //context.Roles.Add(new RoleDto() { Name="Администратор" });
-            //context.Roles.Add(new RoleDto() { Name="Пользователь" });
+            //context.Roles.Add(new RoleDto() { Name = "Автомаляр" });
+            //context.Roles.Add(new RoleDto() { Name = "Автомеханик" });
+            //context.Roles.Add(new RoleDto() { Name = "Автоэлектрик" });
+            //context.Roles.Add(new RoleDto() { Name = "Шиномонтажник" });
+            //context.Roles.Add(new RoleDto() { Name = "Администратор" });
+            //context.Roles.Add(new RoleDto() { Name = "Пользователь" });
 
             //context.Users.Add(new UserDto()
             //{
@@ -31,7 +31,7 @@ namespace ForTests
             //    }
             //});
 
-            context.Comments.Add(new CommentDto() { });
+            //context.Comments.Add(new CommentDto() { });
 
             context.SaveChanges();
 

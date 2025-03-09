@@ -35,5 +35,10 @@ namespace CarServiceSite.BLL
             CommentDto commentDto = this._mapper.Map<CommentDto>(comment);
             this._userRepository.AddCommentByUserId(commentDto, userId);
         }
+
+        public UserOutputModel GetCurrentUser()
+        {
+            return _mapper.Map<UserOutputModel>(SingleContext.GetInstance().Context.Users.Where(u => u.Id == 1).FirstOrDefault());
+        }
     }
 }
