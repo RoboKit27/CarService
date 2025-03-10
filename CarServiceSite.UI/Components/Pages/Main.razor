@@ -3,23 +3,12 @@
 @using System.Security.Claims
 @rendermode InteractiveServer
 
-<button @onclick="GetClaimsPrincipalData">Get ClaimsPrincipal Data</button>
-<AuthorizeView Roles="Prezenent">
+<AuthorizeView>
     <Authorized>
-        <p>PrezenentPrezenentPrezenent</p>
-
-        @if (claims.Count() > 0)
-        {
-            <ul>
-                @foreach (var claim in claims)
-                {
-                    <li>@claim.Type: @claim.Value</li>
-                }
-            </ul>
-        }
+        <p>Рады вас видеть @_user.FirstName</p>
     </Authorized>
     <NotAuthorized>
-        <p>А ну логинься!</p>
+        <p>Кто ты воин?</p>
     </NotAuthorized>
 </AuthorizeView>
 
@@ -30,6 +19,18 @@
 
     private List<Claim> claims = new List<Claim>();
 
+    private UserOutputModel _user;
+
+    protected override void OnInitialized()
+    {
+        GetClaimsPrincipalData();
+
+        if (claims.Count() != 0)
+        {
+            var userManager = new UserManager();
+            _user = userManager.GetUserById(Convert.ToInt32(claims[0].Value));
+        }
+    }
 
     private async Task GetClaimsPrincipalData()
     {

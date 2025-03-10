@@ -2,12 +2,15 @@
 @using System.Security.Claims
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Authentication.Cookies
+@inject NavigationManager NavManager
 
+<PageTitle>Login</PageTitle>
 
-<EditForm Model="loginModel" OnSubmit="StartLogin" FormName="testing">
-    <InputText @bind-Value="loginModel.Phone"></InputText>
-    <InputText @bind-Value="loginModel.Password"></InputText>
-    <button type="submit">LOGIN</button>
+<EditForm style="display: flex;flex-direction: column;width: 256px;" Model="loginModel" OnSubmit="StartLogin" FormName="loginForm">
+    <InputText style="margin-top: 10px;" @bind-Value="loginModel.Phone" Placeholder="Phone" />
+    <InputText style="margin-top: 10px;" @bind-Value="loginModel.Password" Placeholder="Password" />
+    <p style="color: red;">@ErrorMessage</p>
+    <Button style="margin-top: 20px;" Type="ButtonType.Submit" Color="ButtonColor.Success">Submit</Button>
 </EditForm>
 
 @code {
@@ -17,18 +20,38 @@
     [SupplyParameterFromForm]
     public UserInputModel loginModel { get; set; } = new UserInputModel();
 
+    private string ErrorMessage;
+
     public async void StartLogin()
     {
-        //Идем в базу проверяться и тд
-        var claims = new List<Claim>()
+
+        var userManager = new UserManager();
+        var user = userManager.GetUserByPhone(loginModel);
+
+        if (user != null)
         {
-            new Claim("Phone", loginModel.Phone),
-            new Claim(ClaimTypes.Role, "Prezenent")
-        };
+            if (user.Password == loginModel.Password)
+            {
+                user = (UserOutputModel)user;
+                var claims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, $"{user.Id}"),
+                    new Claim(ClaimTypes.Role, $"{user.Role.Id}")
+                };
 
-        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        var pr = new ClaimsPrincipal(identity);
+                var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var pr = new ClaimsPrincipal(identity);
 
-        await httpContext.SignInAsync(pr);
+                await httpContext.SignInAsync(pr);
+            }
+            else
+            {
+                ErrorMessage = "Некоректный телефон или пароль";
+            }
+        }
+        else
+        {
+            ErrorMessage = "Некоректный телефон или пароль";
+        }
     }
 }
