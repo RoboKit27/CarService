@@ -30,12 +30,13 @@ namespace CarServiceSite.DAL
             return user;
         }
 
-        public int AddUser(UserDto user)
+        public int? AddUser(UserDto user, int roleId)
         {
+            user.Role = _context.Roles.Where(r => r.Id == roleId).FirstOrDefault();
             _context.Users.Add(user);
             _context.SaveChanges();
-            int? id = _context.Users.LastOrDefault().Id;
-            return (int)id;
+            int? id = _context.Users.ToList()[_context.Users.Count()-1].Id;
+            return id;
         }
 
         public RoleDto? GetRoleById(int id)

@@ -38,10 +38,10 @@ namespace CarServiceSite.BLL
             return outputModel;
         }
 
-        public int AddUser(UserInputModel user)
+        public int? AddUser(UserInputModel user, int roleId)
         {
             var dto = _mapper.Map<UserDto>(user);
-            int id = _userRepository.AddUser(dto);
+            int? id = _userRepository.AddUser(dto, roleId);
             return id;
         }
 

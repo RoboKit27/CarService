@@ -30,8 +30,7 @@
 
         if (userManager.GetUserByPhone(registerModel) == null)
         {
-            registerModel.Role = userManager.GetRoleById(6);
-            int newUserId = userManager.AddUser(registerModel);
+            int? newUserId = userManager.AddUser(registerModel, 6);
 
             var claims = new List<Claim>()
             {

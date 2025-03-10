@@ -13,7 +13,7 @@ namespace CarServiceSite.DEBUG
 
 
             var context = new Context();
-            //context.Database.EnsureCreated();
+            context.Database.EnsureCreated();
 
             //context.Roles.Add(new RoleDto() { Name = "Автомаляр" });
             //context.Roles.Add(new RoleDto() { Name = "Автомеханик" });
