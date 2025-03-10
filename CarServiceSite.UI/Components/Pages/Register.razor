@@ -1,0 +1,51 @@
+﻿@page "/register"
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+
+<PageTitle>Register</PageTitle>
+
+<EditForm style="display: flex;flex-direction: column;width: 256px;" Model="registerModel" OnSubmit="StartRegister" FormName="registerForm">
+    <InputText style="margin-top: 10px;" @bind-Value="registerModel.FirstName" Placeholder="FirstName" />
+    <InputText style="margin-top: 10px;" @bind-Value="registerModel.LastName" Placeholder="LastName" />
+    <InputText style="margin-top: 10px;" @bind-Value="registerModel.Phone" Placeholder="Phone" />
+    <InputText style="margin-top: 10px;" @bind-Value="registerModel.Password" Placeholder="Password" />
+    <p style="color: red;">@ErrorMessage</p>
+    <Button style="margin-top: 20px;" Type="ButtonType.Submit" Color="ButtonColor.Success">Submit</Button>
+</EditForm>
+
+@code {
+    [CascadingParameter]
+    public HttpContext httpContext { get; set; }
+
+    [SupplyParameterFromForm]
+    public UserInputModel registerModel { get; set; } = new UserInputModel();
+
+    private string ErrorMessage;
+
+    public async void StartRegister()
+    {
+
+        var userManager = new UserManager();
+
+        if (userManager.GetUserByPhone(registerModel) == null)
+        {
+            int? newUserId = userManager.AddUser(registerModel, 6);
+
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Name, $"{newUserId}"),
+                new Claim(ClaimTypes.Role, "6")
+            };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var pr = new ClaimsPrincipal(identity);
+
+            await httpContext.SignInAsync(pr);
+        }
+        else 
+        {
+            ErrorMessage = "Пользователь с данным телефоном уже существует";
+        }
+    }
+}

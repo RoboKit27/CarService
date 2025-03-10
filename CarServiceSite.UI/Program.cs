@@ -1,4 +1,5 @@
 using CarServiceSite.UI.Components;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace CarServiceSite.UI
 {
@@ -12,7 +13,18 @@ namespace CarServiceSite.UI
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
-            builder.Services.AddBlazorBootstrap();
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(
+                    options =>
+                    {
+                        options.Cookie.Name = "auth_token";
+                        options.LoginPath = "/login";
+                        options.Cookie.MaxAge = TimeSpan.FromDays(7);
+                    });
+
+            builder.Services.AddAuthorization();
+            builder.Services.AddCascadingAuthenticationState();
+            builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
 
@@ -28,6 +40,9 @@ namespace CarServiceSite.UI
 
             app.UseStaticFiles();
             app.UseAntiforgery();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
