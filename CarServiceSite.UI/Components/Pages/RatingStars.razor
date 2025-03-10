@@ -1,0 +1,105 @@
+﻿﻿<div style="width: @((int)(1280*Scale))px;height: @((int)(256*Scale))px;overflow: hidden;">
+    @foreach (RatingStar star in _stars)
+    {
+        if (_stars.IndexOf(star) < DefaultValue && !IsDynamic) _stars[_stars.IndexOf(star)].IsActive = true;
+        <img src=@star.GetCurrentImage() width="@(256*Scale)" height="@(256*Scale)" style="transition: opacity 0.3s ease;" @onmouseenter="() => EnableStars(star.Id)" @onmouseout="DisableStars" @onclick="Off" />
+    }
+</div>
+
+@code {
+    [Parameter]
+    public double Scale { get; set; } = 1;
+    [Parameter]
+    public int DefaultValue { get; set; } = 0;
+    [Parameter]
+    public bool IsDynamic { get; set; } = false;
+    [Parameter]
+    public Action? OnSet { get; set; } = null;
+
+    private List<RatingStar> _stars = new List<RatingStar>();
+
+    protected override void OnParametersSet()
+    {
+        if (this.IsDynamic) this.DefaultValue = 0;
+    }
+
+    public RatingStars()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            this.AddStar(i < this.DefaultValue);
+        }
+    }
+
+    public int GetValue()
+    {
+        if (!this.IsDynamic)
+        {
+            int count = 0;
+            foreach (RatingStar star in this._stars)
+            {
+                if (star.IsActive)
+                {
+                    count++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return count;
+        }
+        return 0;
+    }
+
+    public void Off()
+    {
+        this.IsDynamic = false;
+        if (this.OnSet != null)
+        {
+            this.OnSet();
+        }
+    }
+    public void On() => this.IsDynamic = true;
+
+    private void EnableStars(int activeId)
+    {
+        if (this.IsDynamic)
+        {
+            foreach (RatingStar star in this._stars)
+            {
+                if (star.Id <= activeId)
+                {
+                    this._stars[star.Id].IsActive = true;
+                }
+                else
+                {
+                    this._stars[star.Id].IsActive = false;
+                }
+            }
+        }
+    }
+
+    private void DisableStars()
+    {
+        if (this.IsDynamic)
+        {
+            foreach (RatingStar star in this._stars)
+            {
+                if (star.IsActive)
+                {
+                    this._stars[star.Id].IsActive = false;
+                }
+            }
+        }
+    }
+
+    private void AddStar(bool isActive)
+    {
+        this._stars.Add(new RatingStar()
+            {
+                Id = this._stars.Count,
+                IsActive = isActive
+            });
+    }
+}
