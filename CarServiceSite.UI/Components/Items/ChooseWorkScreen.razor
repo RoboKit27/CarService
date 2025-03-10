@@ -1,0 +1,46 @@
+﻿@page "/choose-work"
+@rendermode InteractiveServer
+
+<div style="display: flex;flex-direction: column;width: 384px;">
+    @foreach (WorkOutputModel work in _works)
+    {
+        <Card style="margin-top: 10px;width: auto;">
+            <CardBody>
+                <div>
+                    <p style="margin: 0px;">@work.Name</p>
+                    <p style="margin: 0px;">@work.Time</p>
+                    <p style="margin: 0px;">@work.Cost</p>
+                </div>
+                <div style="display: flex;flex-direction: row-reverse;">
+                    <Button
+                        style="width: 30px;height: 30px;"
+                        Color=ButtonColor.Primary
+                        Outline=!_states[_works.IndexOf(work)]
+                        @onclick="f => { RevertState(_works.IndexOf(work)); }" 
+                    />
+                </div>
+            </CardBody>
+        </Card>
+    }
+</div>
+
+@code {
+    private List<WorkOutputModel> _works;
+    private List<bool> _states;
+
+    public ChooseWorkScreen()
+    {
+        var bookingManager = new BookingManager();
+        _works = bookingManager.GetAllWorks();
+        _states = new();
+        foreach (WorkOutputModel work in _works)
+        {
+            _states.Add(false);
+        }
+    }
+
+    private void RevertState(int index)
+    {
+        _states[index] = !_states[index];
+    }
+}

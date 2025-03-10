@@ -1,4 +1,6 @@
-﻿namespace CarServiceSite.Core.Dtos
+﻿using System.Net;
+
+namespace CarServiceSite.Core.Dtos
 {
     public class UserDto
     {
@@ -8,5 +10,6 @@
         public string Phone { get; set; }
         public string Password { get; set; }
         public RoleDto Role { get; set; }
+        public List<WorkDto>? Works { get; set; }
     }
 }

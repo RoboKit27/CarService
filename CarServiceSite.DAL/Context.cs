@@ -7,6 +7,7 @@ namespace CarServiceSite.DAL
     {
         public DbSet<UserDto> Users { get; set; }
         public DbSet<RoleDto> Roles { get; set; }
+        public DbSet<WorkDto> Works { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
